@@ -24,7 +24,7 @@ module.exports = class User {
       values: [email]
     };
     const result = await pool.query(query);
-    this.userByEmail = result[0];
+    this.userByEmail = result.rows;
   }
   /**
  * Method to get user with its username
@@ -36,34 +36,32 @@ module.exports = class User {
       values: [username]
     };
     const result = await pool.query(query);
-    this.userByUsername = result[0];
+    this.userByUsername = result.rows;
   }
   /**
    * Method to check if the email is already used
    * @param {string} email 
-   * @returns {boolean} true if the email is already used
    */
   async checkUserEmail(email) {
     // to check if the email is already used, we select the user with the email
     await this.findUserByEmail(email);
     // if the user is found, we return true
-    if (this.userByEmail) {
-      return true;
+    if (this.userByEmail.length !== 0) {
+      return (this.checkEmail = true);
     }
     // if the user is not found, we return false
-    return false;
+    return (this.checkEmail = false);
   }
   /**
    * Method to check if username is already used
    * @param {string} username 
-   * @returns {boolean} true if the username is already used
    */
-  async checkUsername(username) {
+  async checkUserUsername(username) {
     await this.findUserByUsername(username);
-    if (this.userByUsername) {
-      return true;
+    if (this.userByUsername.length !== 0) {
+      return (this.checkUsername = true);
     }
-    return false;
+    return (this.checkUsername = false);
   }
   /**
    * Method to create a new user
@@ -71,9 +69,9 @@ module.exports = class User {
   async createOne() {
     // before we create a new user, we check if the email or username is already used
     await this.checkUserEmail(this.email);
-    await this.checkUsername(this.username);
+    await this.checkUserUsername(this.username);
     // if the email or username is already used, we return
-    if (this.checkUserEmail(this.email) || this.checkUsername(this.username)) {
+    if (this.checkEmail || this.checkUsername) {
       return;
     }
     // if the email or username is not used, we hash the password
