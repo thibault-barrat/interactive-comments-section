@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS "users",
 -- Creation of the user table
 CREATE TABLE "users" (
   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  username TEXT NOT NULL,
+  username TEXT NOT NULL UNIQUE,
   email TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
   -- by default, the user's avatar will be the logo of mentor.me
