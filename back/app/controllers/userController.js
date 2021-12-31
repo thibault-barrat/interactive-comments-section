@@ -1,6 +1,11 @@
 const User = require("../models/user");
 
 const userController = {
+  /**
+   * Create a new user
+   * @param {Object} req 
+   * @param {Object} res 
+   */
   createNewUser: async (req, res) => {
     try {
       // we check if all the fields are filled

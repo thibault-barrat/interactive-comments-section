@@ -9,10 +9,10 @@ const router = Router();
 
 // routes for users
 /**
- * Get all users
- * @route GET /allUsers
+ * Sign up route
+ * @route POST /register
  */
-router.get('/allUsers', userController.getAllUsers);
+router.post('/register', userController.createNewUser);
 
 // routes for comments
 /**
