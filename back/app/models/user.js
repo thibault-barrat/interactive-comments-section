@@ -19,8 +19,11 @@ module.exports = class User {
    * @param {string} email 
    */
   async findUserByEmail(email) {
-    const query = "SELECT * FROM users WHERE email = ?";
-    const result = await pool.query(query, [email]);
+    const query = {
+      text: "SELECT * FROM users WHERE email = $1",
+      values: [email]
+    };
+    const result = await pool.query(query);
     this.userByEmail = result[0];
   }
   /**
@@ -28,8 +31,11 @@ module.exports = class User {
  * @param {string} username 
  */
   async findUserByUsername(username) {
-    const query = "SELECT * FROM users WHERE username = ?";
-    const result = await pool.query(query, [username]);
+    const query = {
+      text: "SELECT * FROM users WHERE username = $1",
+      values: [username]
+    };
+    const result = await pool.query(query);
     this.userByUsername = result[0];
   }
   /**
@@ -74,14 +80,10 @@ module.exports = class User {
     const hashedPassword = await bcrypt.hash(this.password, this.saltRounds);
     // we insert the user in the database
     const query =
-      "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-    const result = await pool.query(
-      query,
-      [
-        this.username,
-        this.email,
-        hashedPassword
-      ]
-    );
+      {
+        text: "INSERT INTO users (username, email, password) VALUES ($1, $2, $3)",
+        values: [this.username, this.email, hashedPassword]
+      };
+    const result = await pool.query(query);
   }
 }
