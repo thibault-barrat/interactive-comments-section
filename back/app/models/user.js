@@ -66,9 +66,9 @@ module.exports = class User {
     // before we create a new user, we check if the email or username is already used
     await this.checkUserEmail(this.email);
     await this.checkUsername(this.username);
-    // if the email or username is already used, we return false
+    // if the email or username is already used, we return
     if (this.checkUserEmail(this.email) || this.checkUsername(this.username)) {
-      return false;
+      return;
     }
     // if the email or username is not used, we hash the password
     const hashedPassword = await bcrypt.hash(this.password, this.saltRounds);
