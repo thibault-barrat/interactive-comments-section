@@ -1,5 +1,5 @@
 const RefreshToken = require("../models/refreshToken");
-// const { decodedAccessToken, decodedRefreshToken } = require("../../utils/jwt");
+const { decodedAccessToken } = require("../../utils/jwt");
 
 /**
  * Function to check validity of refreshToken
@@ -28,6 +28,35 @@ const checkRefreshToken = async (req, res, next) => {
     });
   }
   next();
-}
+};
 
-module.exports = { checkRefreshToken };
+/**
+ * Function to check validity of acessToken
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
+const checkAccessToken = async (req, res, next) => {
+  // we get the accessToken from the request authorization header
+  let accessToken;
+  if (req.headers.authorization) {
+    accessToken = req.headers["authorization"].split(" ")[1];
+  }
+  // if there is no accessToken in the header, we send an error message
+  if (!accessToken) {
+    return res.status(401).send({
+      errorMessage: "A token is required for authentication",
+    });
+  }
+  try {
+    const decodedToken = decodedAccessToken(accessToken);
+    req.user = decodedToken;
+  } catch (error) {
+    return res.status(401).send({
+      errorMessage: "Access token is not valid",
+    });
+  }
+  next();
+};
+
+module.exports = { checkRefreshToken, checkAccessToken };

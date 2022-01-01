@@ -10,26 +10,26 @@ VALUES
   (
     'juliusomo',
     'juliusomo@example.com',
-    'motdepasse',
+    '$2b$10$ZFRIcpp3bhKSes2hP7hbJON/6qageL37C0ugZkyMBZLhOC1eXvWuC',
     DEFAULT
   ),
   (
     'amyrobson',
     'amyrobson@example.com',
-    'motdepasse',
+    '$2b$10$ZFRIcpp3bhKSes2hP7hbJON/6qageL37C0ugZkyMBZLhOC1eXvWuC',
     DEFAULT
   ),
   (
     'maxblagun',
     'maxblagun@example.com',
-    'motdepasse',
+    '$2b$10$ZFRIcpp3bhKSes2hP7hbJON/6qageL37C0ugZkyMBZLhOC1eXvWuC',
     DEFAULT
   ),
   (
     'ramsesmiron',
     'ramsesmiron@example.com',
-    'motdepasse',
-    DEFAULT
+    '$2b$10$ZFRIcpp3bhKSes2hP7hbJON/6qageL37C0ugZkyMBZLhOC1eXvWuC',
+    DEFAULt
   );
 INSERT INTO
   "comments" (

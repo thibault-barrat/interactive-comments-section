@@ -1,7 +1,8 @@
 BEGIN;
 -- Deletion of tables if they already exist 
 DROP TABLE IF EXISTS "users",
-"comments";
+"comments",
+"refreshtokens";
 -- Creation of the user table
 CREATE TABLE "users" (
   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

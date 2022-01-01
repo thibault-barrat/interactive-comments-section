@@ -23,10 +23,20 @@ module.exports = class Comment {
     FROM comments INNER JOIN users ON users.id = comments.user_id` };
     try {
     const data = await pool.query(query);
-    console.log(data.rows);
     this.allComments = data.rows;
     } catch (error) {
       console.log("error", error);
     }
+  }
+  /**
+   * Create a new comment
+   * @param {number} userId id of the user who created the comment
+   */
+  async createOne(userId) {
+    const query = {
+      text: `INSERT INTO comments (content, score, replying_to, user_id) VALUES ($1, $2, $3, $4)`,
+      values: [this.content, this.score, this.replying_to, userId],
+    };
+    await pool.query(query);
   }
 }

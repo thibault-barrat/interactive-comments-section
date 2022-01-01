@@ -6,7 +6,7 @@ const commentController = require('./controllers/commentController');
 const tokenController = require('./controllers/tokenController');
 
 // middlewares import
-const { checkRefreshToken } = require('./middlewares/auth');
+const { checkRefreshToken, checkAccessToken } = require('./middlewares/auth');
 
 // router
 const router = Router();
@@ -26,7 +26,7 @@ router.post('/login', userController.loginUser);
  * Logout route
  * @route POST /logout
  */
-router.post('/logout', userController.logoutUser);
+router.post('/logout', checkRefreshToken, userController.logoutUser);
 
 // routes for comments
 /**
@@ -34,6 +34,11 @@ router.post('/logout', userController.logoutUser);
  * @route GET /allComments
  */
  router.get('/allComments', commentController.getAllComments);
+/**
+ * Create a new comment
+ * @route POST /createComment
+ */
+router.post('/createComment', checkAccessToken, commentController.createComment);
 
  // routes for tokens
 /**
