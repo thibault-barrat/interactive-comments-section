@@ -70,6 +70,54 @@ const commentController = {
     } catch (error) {
       res.status(500).send(error);
     }
+  },
+  /**
+   * Increment a comment's likes
+   * @param {Object} req
+   * @param {Object} res
+   */
+  incrementLikes: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const comment = new Comment();
+      await comment.findOne(id);
+      if (comment.serviceById.length === 0) {
+        return res.status(404).send({
+          errorMessage: `Comment with id ${id} not found!`,
+        });
+      }
+      comment.score = comment.serviceById[0].score + 1;
+      await comment.updateScoreOne(id);
+      res.status(200).send({
+        score: comment.score,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  },
+  /**
+   * Decrement a comment's likes
+   * @param {Object} req
+   * @param {Object} res
+   */
+  decrementLikes: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const comment = new Comment();
+      await comment.findOne(id);
+      if (comment.serviceById.length === 0) {
+        return res.status(404).send({
+          errorMessage: `Comment with id ${id} not found!`,
+        });
+      }
+      comment.score = comment.serviceById[0].score - 1;
+      await comment.updateScoreOne(id);
+      res.status(200).send({
+        score: comment.score,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
   }
 };
 

@@ -69,4 +69,15 @@ module.exports = class Comment {
     };
     await pool.query(query);
   }
+  /**
+   * Update a comment score
+   * @param {number} id id of the comment to modify
+   */
+  async updateScoreOne(id) {
+    const query = {
+      text: `UPDATE comments SET score = $1 WHERE id = $2`,
+      values: [this.score, id],
+    };
+    await pool.query(query);
+  }
 };

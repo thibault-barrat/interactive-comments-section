@@ -44,6 +44,17 @@ router.post('/createComment', checkAccessToken, commentController.createComment)
  * @route PATCH /updateComment
  */
 router.patch('/updateComment/:id', checkAccessToken, commentController.updateComment);
+/**
+ * Increase a comment score
+ * @route GET /increaseCommentScore
+ */
+router.get('/increaseCommentScore/:id', commentController.incrementLikes);
+/**
+ * Decrease a comment score
+ * @route GET /decreaseCommentScore
+ */
+router.get('/decreaseCommentScore/:id', commentController.decrementLikes);
+
  // routes for tokens
 /**
  * Generate new tokens
