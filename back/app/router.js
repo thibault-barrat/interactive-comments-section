@@ -13,6 +13,11 @@ const router = Router();
  * @route POST /register
  */
 router.post('/register', userController.createNewUser);
+/**
+ * Sign in route
+ * @route POST /login
+ */
+router.post('/login', userController.loginUser);
 
 // routes for comments
 /**
