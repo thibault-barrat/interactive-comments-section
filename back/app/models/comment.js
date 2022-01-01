@@ -80,4 +80,15 @@ module.exports = class Comment {
     };
     await pool.query(query);
   }
+  /**
+   * Delete a comment
+   * @param {number} id id of the comment to delete
+   */
+  async deleteOne(id) {
+    const query = {
+      text: `DELETE FROM comments WHERE id = $1`,
+      values: [id],
+    };
+    await pool.query(query);
+  }
 };

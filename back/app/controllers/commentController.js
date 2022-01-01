@@ -118,6 +118,34 @@ const commentController = {
     } catch (error) {
       res.status(500).send(error);
     }
+  },
+  /**
+   * Delete a comment
+   * @param {Object} req
+   * @param {Object} res
+   */
+  deleteComment: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const comment = new Comment();
+      await comment.findOne(id);
+      if (comment.serviceById.length === 0) {
+        return res.status(404).send({
+          errorMessage: `Comment with id ${id} not found!`,
+        });
+      }
+      if (comment.serviceById[0].user.id !== req.user.id) {
+        return res.status(401).send({
+          errorMessage: "You can't delete this comment!",
+        });
+      }
+      await comment.deleteOne(id);
+      res.status(200).send({
+        deleted: true,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
   }
 };
 

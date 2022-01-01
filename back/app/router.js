@@ -54,6 +54,11 @@ router.get('/increaseCommentScore/:id', commentController.incrementLikes);
  * @route GET /decreaseCommentScore
  */
 router.get('/decreaseCommentScore/:id', commentController.decrementLikes);
+/**
+ * Delete a comment
+ * @route DELETE /deleteComment
+ */
+router.delete('/deleteComment/:id', checkAccessToken, commentController.deleteComment);
 
  // routes for tokens
 /**
