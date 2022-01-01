@@ -5,6 +5,9 @@ const userController = require('./controllers/userController');
 const commentController = require('./controllers/commentController');
 const tokenController = require('./controllers/tokenController');
 
+// middlewares import
+const { checkRefreshToken } = require('./middlewares/auth');
+
 // router
 const router = Router();
 
@@ -37,7 +40,7 @@ router.post('/logout', userController.logoutUser);
  * Generate new tokens
  * @route POST /refreshToken
  */
-router.post('/refreshToken', tokenController.generateNewTokens);
+router.post('/refreshToken', checkRefreshToken, tokenController.generateNewTokens);
 
 // router export
 module.exports = router;
