@@ -109,6 +109,21 @@ const userController = {
       });
     }
   },
+  /**
+   * Logout a user
+   * @param {Object} req
+   * @param {Object} res
+   */
+  logoutUser: async (req, res) => {
+    const refreshToken = req.body.refreshToken;
+    const token = new RefreshToken();
+    // we delete refresh token from database
+    await token.deleteToken(refreshToken);
+    // we send a success message
+    return res.status(200).send({
+      connected: false,
+    });
+  },
 };
 
 module.exports = userController;

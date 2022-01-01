@@ -18,6 +18,11 @@ router.post('/register', userController.createNewUser);
  * @route POST /login
  */
 router.post('/login', userController.loginUser);
+/**
+ * Logout route
+ * @route POST /logout
+ */
+router.post('/logout', userController.logoutUser);
 
 // routes for comments
 /**
