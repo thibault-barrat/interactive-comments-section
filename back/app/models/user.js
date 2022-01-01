@@ -64,6 +64,16 @@ module.exports = class User {
     return (this.checkUsername = false);
   }
   /**
+   * Method to check if the password is correct
+   */
+  async checkUserPassword() {
+    const passwordbcrypt = await bcrypt.compare(this.password, this.userByEmail[0].password);
+    if (passwordbcrypt) {
+      return (this.checkPassword = true);
+    }
+    return (this.checkPassword = false);
+  }
+  /**
    * Method to create a new user
    */
   async createOne() {
