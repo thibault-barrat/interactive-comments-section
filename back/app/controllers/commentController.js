@@ -41,6 +41,35 @@ const commentController = {
       console.log('erreur', error);
       res.status(500).send(error);
     }
+  },
+  /**
+   * Modify a comment content
+   * @param {Object} req
+   * @param {Object} res
+   */
+  updateComment: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const comment = new Comment(req.body);
+      // we find the comment to update to check if the user is the owner
+      await comment.findOne(id);
+      if (comment.serviceById.length === 0) {
+        return res.status(404).send({
+          errorMessage: `Comment with id ${id} not found!`,
+        });
+      }
+      if (comment.serviceById[0].user.id !== req.user.id) {
+        return res.status(401).send({
+          errorMessage: "You can't modify this comment!",
+        });
+      }
+      await comment.updateContentOne(id);
+      res.status(200).send({
+        updated: true,
+      });
+    } catch (error) {
+      res.status(500).send(error);
+    }
   }
 };
 

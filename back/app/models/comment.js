@@ -39,4 +39,34 @@ module.exports = class Comment {
     };
     await pool.query(query);
   }
-}
+  /**
+   * Find a comment by id
+   * @param {number} id id of the comment to find
+   */
+  async findOne(id) {
+    const query = {
+      text: `SELECT comments.id, comments.content, comments.score, comments.replying_to, comments.created_at,
+      json_build_object(
+        'id', users.id,
+        'username', users.username,
+        'avatar_url', users.avatar_url
+      ) as user
+    FROM comments INNER JOIN users ON users.id = comments.user_id WHERE comments.id = $1`,
+        
+      values: [id],
+    };
+    const data = await pool.query(query);
+    this.serviceById = data.rows;
+  }
+  /**
+   * Modify a comment content
+   * @param {number} id id of the comment to modify
+   */
+  async updateContentOne(id) {
+    const query = {
+      text: `UPDATE comments SET content = $1 WHERE id = $2`,
+      values: [this.content, id],
+    };
+    await pool.query(query);
+  }
+};

@@ -39,7 +39,11 @@ router.post('/logout', checkRefreshToken, userController.logoutUser);
  * @route POST /createComment
  */
 router.post('/createComment', checkAccessToken, commentController.createComment);
-
+/**
+ * Modify a comment content
+ * @route PATCH /updateComment
+ */
+router.patch('/updateComment/:id', checkAccessToken, commentController.updateComment);
  // routes for tokens
 /**
  * Generate new tokens
