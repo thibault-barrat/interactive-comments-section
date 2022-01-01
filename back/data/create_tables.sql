@@ -23,4 +23,9 @@ CREATE TABLE "comments" (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+-- Creation of the refreshToken table
+CREATE TABLE "refreshtokens" (
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  refreshtoken TEXT NOT NULL UNIQUE
+);
 COMMIT;

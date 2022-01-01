@@ -1,4 +1,6 @@
 const User = require("../models/user");
+const RefreshToken = require("../models/refreshToken");
+const { generateAccessToken, generateRefreshToken } = require("../../utils/jwt");
 
 const userController = {
   /**
@@ -60,7 +62,53 @@ const userController = {
         message: error.message,
       });
     }
-  }
+  },
+  /**
+   * Login a user
+   * @param {Object} req
+   * @param {Object} res
+   */
+  loginUser: async (req, res) => {
+    try {
+      const user = new User(req.body);
+      // we check if user exists
+      await user.checkUserEmail(req.body.email);
+      if(!user.checkEmail) {
+        return res.status(404).send({
+          errorMessage: "User not found!"
+        });
+      }
+      // we check if password is correct
+      await user.checkUserPassword();
+      if(!user.checkPassword) {
+        return res.status(401).send({
+          errorMessage: "Password is not correct!"
+        });
+      }
+      // we generate tokens
+      const newAccessToken = generateAccessToken({
+        id: user.userByEmail[0].id,
+      });
+      const newRefreshToken = generateRefreshToken({
+        id: user.userByEmail[0].id,
+      });
+      // we save the refresh token in the database
+      const refreshTokenObject = new RefreshToken();
+      await refreshTokenObject.insertNewToken(newRefreshToken);
+      // we send the response
+      return res.status(200).send({
+        connected: true,
+        id: user.userByEmail[0].id,
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      });
+    } catch (error) {
+      // we send an error message
+      res.status(500).send({
+        message: error.message,
+      });
+    }
+  },
 };
 
 module.exports = userController;
