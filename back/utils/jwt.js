@@ -13,7 +13,9 @@ function generateRefreshToken(user) {
 function decodedRefreshToken(token) {
   return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, res) => {
     if (err) {
-      return err.message;
+      return {
+        errorMessage: err.message,
+      };
     }
     return res;
   });

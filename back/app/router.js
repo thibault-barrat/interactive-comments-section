@@ -3,6 +3,7 @@ const { Router } = require('express');
 // controllers import
 const userController = require('./controllers/userController');
 const commentController = require('./controllers/commentController');
+const tokenController = require('./controllers/tokenController');
 
 // router
 const router = Router();
@@ -30,6 +31,13 @@ router.post('/logout', userController.logoutUser);
  * @route GET /allComments
  */
  router.get('/allComments', commentController.getAllComments);
+
+ // routes for tokens
+/**
+ * Generate new tokens
+ * @route POST /refreshToken
+ */
+router.post('/refreshToken', tokenController.generateNewTokens);
 
 // router export
 module.exports = router;
