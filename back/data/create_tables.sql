@@ -10,7 +10,7 @@ CREATE TABLE "users" (
   email TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
   -- by default, the user's avatar will be the logo of mentor.me
-  avatar_url TEXT NOT NULL DEFAULT 'https://i.imgur.com/Z9fVYeP.png',
+  avatar_url TEXT NOT NULL DEFAULT 'sbcf-default-avatar.png',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

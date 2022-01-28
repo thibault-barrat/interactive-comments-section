@@ -11,25 +11,25 @@ VALUES
     'juliusomo',
     'juliusomo@example.com',
     '$2b$10$ZFRIcpp3bhKSes2hP7hbJON/6qageL37C0ugZkyMBZLhOC1eXvWuC',
-    DEFAULT
+    'image-juliusomo.png'
   ),
   (
     'amyrobson',
     'amyrobson@example.com',
     '$2b$10$ZFRIcpp3bhKSes2hP7hbJON/6qageL37C0ugZkyMBZLhOC1eXvWuC',
-    DEFAULT
+    'image-amyrobson.png'
   ),
   (
     'maxblagun',
     'maxblagun@example.com',
     '$2b$10$ZFRIcpp3bhKSes2hP7hbJON/6qageL37C0ugZkyMBZLhOC1eXvWuC',
-    DEFAULT
+    'image-maxblagun.png'
   ),
   (
     'ramsesmiron',
     'ramsesmiron@example.com',
     '$2b$10$ZFRIcpp3bhKSes2hP7hbJON/6qageL37C0ugZkyMBZLhOC1eXvWuC',
-    DEFAULt
+    'image-ramsesmiron.png'
   );
 INSERT INTO
   "comments" (
