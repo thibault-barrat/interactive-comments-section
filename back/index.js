@@ -1,6 +1,6 @@
 require("dotenv").config({ path: "./.env" });
 const express = require("express");
-// const cors = require("cors");
+const cors = require("cors");
 const port = process.env.PORT || 3000;
 const app = express();
 
@@ -12,6 +12,13 @@ app.use(
     extended: false,
   })
 );
+console.log(process.env.ALLOWED_ORIGIN);
+// configuring cors
+const corsOptions = {
+  origin: process.env.ALLOWED_ORIGIN,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 // app.get('/', (request, response) => {
 //   response.json({ info: 'Node.js, Express, and Postgres API' })
