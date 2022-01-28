@@ -1,0 +1,10 @@
+@use "./styles/_reset.css";
+@use "./styles/_vars";
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap");
+
+.app {
+  font-family: "Rubik", sans-serif;
+  height: 100vh;
+  background-color: vars.$very-light-gray;
+  padding: 20px 10px;
+}
