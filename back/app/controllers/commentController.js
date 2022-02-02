@@ -10,6 +10,9 @@ const commentController = {
     try {
       const comment = new Comment();
       await comment.findAll();
+      comment.allComments.sort((a, b) => {
+        return a.id - b.id;
+      });
       res.status(200).send(comment.allComments);
     } catch (error) {
       res.status(500).send(error);
