@@ -23,7 +23,7 @@ const App: React.FC = () => {
   return (
     <div className={styles.app}>
      {isLoading && <Spinner size={100} />}
-     {!isLoading && <CommentList comments={comments} />}
+     {!isLoading && <CommentList comments={comments} setComments={setComments} />}
      <Attribution />
     </div>
   );

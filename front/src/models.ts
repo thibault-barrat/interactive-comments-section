@@ -8,7 +8,11 @@ export interface Comment {
   id: number;
   content: string;
   score: number;
-  replyingTo: number;
-  createdAt: string;
+  replying_to: number;
+  created_at: string;
   user: User;
+}
+
+export interface Score {
+  score: number
 }

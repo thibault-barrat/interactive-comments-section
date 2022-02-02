@@ -1,0 +1,22 @@
+@use '../../styles/vars';
+
+.container {
+  background: vars.$very-light-gray;
+  border-radius: 5px;
+  grid-row: 3;
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  font-weight: 500;
+  color: vars.$moderate-blue;
+  width: 100px;
+}
+
+.button {
+  background: transparent;
+  border: none;
+  padding: 15px;
+  display: flex;
+}
+

@@ -5,15 +5,18 @@ import styles from "./CommentList.module.scss";
 
 type Props = {
   comments: Comment[];
+  setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
 };
 
-const CommentList: React.FC<Props> = ({ comments }) => {
+const CommentList: React.FC<Props> = ({ comments, setComments }) => {
   return (
     <div className={styles.container}>
       {comments.map((comment) => (
         <SingleComment
           key={comment.id}
-          comment={comment}
+          id={comment.id}
+          comments={comments}
+          setComments={setComments}
         />
       ))}
     </div>

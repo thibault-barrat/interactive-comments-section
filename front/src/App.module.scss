@@ -4,7 +4,9 @@
 
 .app {
   font-family: "Rubik", sans-serif;
-  height: 100vh;
+  min-height: 100vh;
   background-color: vars.$very-light-gray;
-  padding: 20px 10px;
+  padding: 30px 15px;
+  color: vars.$grayish-blue;
+  position: relative;
 }
