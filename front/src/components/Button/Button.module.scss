@@ -1,0 +1,16 @@
+@use '../../styles/vars';
+
+.button {
+  border: none;
+  color: white;
+  text-transform: uppercase;
+  background: vars.$moderate-blue;
+  padding: 18px 30px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 1.1rem;
+  transition: 0.2s;
+  &:hover {
+    background: vars.$light-grayish-blue;
+  }
+}

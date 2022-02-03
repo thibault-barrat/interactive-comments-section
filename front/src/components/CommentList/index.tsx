@@ -9,6 +9,15 @@ type Props = {
 };
 
 const CommentList: React.FC<Props> = ({ comments, setComments }) => {
+  let sortedComments = comments.filter((comment) => comment.replying_to === null);
+  let replies = comments.filter((comment) => comment.replying_to !== null);
+  for (const reply of replies) {
+    const parentIndex = sortedComments.findIndex((comment) => comment.id === reply.replying_to);
+    if (parentIndex !== -1) {
+      sortedComments.splice(parentIndex + 1, 0, reply);
+    }
+  }
+  console.log(sortedComments);
   return (
     <div className={styles.container}>
       {comments.map((comment) => (
