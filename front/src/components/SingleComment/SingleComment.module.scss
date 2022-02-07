@@ -77,12 +77,16 @@
   &:hover {
     color: vars.$light-grayish-blue;
     .icon {
-      filter: hue-rotate(1deg) saturate(142%) brightness(163%);
+      path {
+        fill: vars.$light-grayish-blue;
+      }
     }
   }
 }
 
 .icon {
   margin-right: 5px;
-  transition: all 0.2s ease-in-out;
+  path {
+    transition: all 0.2s ease-in-out;
+  } 
 }
