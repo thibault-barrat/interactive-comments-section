@@ -16,3 +16,9 @@ export interface Comment {
 export interface Score {
   score: number
 }
+
+export interface Token {
+  exp: number;
+  iat: number;
+  id: number;
+}

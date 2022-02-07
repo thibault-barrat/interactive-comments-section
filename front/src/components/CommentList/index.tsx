@@ -6,9 +6,12 @@ import styles from "./CommentList.module.scss";
 type Props = {
   comments: Comment[];
   setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
+  isLogged: boolean;
+  accessToken: string;
+  userId: number;
 };
 
-const CommentList: React.FC<Props> = ({ comments, setComments }) => {
+const CommentList: React.FC<Props> = ({ comments, setComments, isLogged, accessToken, userId }) => {
   let sortedComments = comments.filter((comment) => comment.replying_to === null);
   let replies = comments.filter((comment) => comment.replying_to !== null);
   for (const reply of replies) {
@@ -26,6 +29,9 @@ const CommentList: React.FC<Props> = ({ comments, setComments }) => {
           id={comment.id}
           comments={comments}
           setComments={setComments}
+          isLogged={isLogged}
+          accessToken={accessToken}
+          userId={userId}
         />
       ))}
     </div>

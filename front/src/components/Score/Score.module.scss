@@ -23,7 +23,7 @@
   }
   &:hover {
     img {
-      filter: brightness(0) saturate(100%) invert(34%) sepia(52%) saturate(915%) hue-rotate(204deg) brightness(90%) contrast(91%);
+      filter: hue-rotate(-1deg) saturate(70%) brightness(61%);
     }
   }
 }

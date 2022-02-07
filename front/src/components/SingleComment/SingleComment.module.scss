@@ -6,7 +6,7 @@
   margin-bottom: 15px;
   padding: 15px;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto min-content;
   grid-template-rows: auto auto auto;
 }
 
@@ -61,4 +61,28 @@
 .answerTo {
   font-weight: 500;
   color: vars.$moderate-blue;
+}
+
+.replyButton {
+  border: none;
+  background: transparent;
+  grid-row: 3;
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: vars.$moderate-blue;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    color: vars.$light-grayish-blue;
+    .icon {
+      filter: hue-rotate(1deg) saturate(142%) brightness(163%);
+    }
+  }
+}
+
+.icon {
+  margin-right: 5px;
+  transition: all 0.2s ease-in-out;
 }
