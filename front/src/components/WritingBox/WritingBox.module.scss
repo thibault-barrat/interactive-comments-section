@@ -1,0 +1,42 @@
+@use "../../styles/vars";
+
+.container {
+  background: white;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  padding: 15px;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: auto min-content;
+  grid-template-rows: auto auto;
+  align-items: center;
+}
+
+.textarea {
+  grid-row: 1;
+  grid-column: 1 / span 2;
+  resize: none;
+  padding: 10px;
+  font-family: inherit;
+  color: inherit;
+  background: transparent;
+  margin-bottom: 15px;
+  resize: vertical;
+  outline: none;
+  border: 1px solid vars.$light-gray;
+  border-radius: 5px;
+  &::placeholder {
+    opacity: 1;
+  }
+  &:focus {
+    border: 1px solid vars.$moderate-blue;
+  }
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}

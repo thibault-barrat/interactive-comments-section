@@ -10,9 +10,10 @@ type Props = {
   setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
   setAccessToken: React.Dispatch<React.SetStateAction<string>>;
   setUserId: React.Dispatch<React.SetStateAction<number>>;
+  setAvatarUrl: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const Header: React.FC<Props> = ({ isLogged, setShowSignInForm, setShowSignUpForm, setIsLogged, setAccessToken, setUserId }) => {
+const Header: React.FC<Props> = ({ isLogged, setShowSignInForm, setShowSignUpForm, setIsLogged, setAccessToken, setUserId, setAvatarUrl }) => {
   const handleSignOut = () => {
     axios.post(process.env.REACT_APP_API_URL + "/logout", {
       refreshToken: localStorage.getItem("refreshToken")
@@ -21,6 +22,7 @@ const Header: React.FC<Props> = ({ isLogged, setShowSignInForm, setShowSignUpFor
     setIsLogged(false);
     setAccessToken("");
     setUserId(0);
+    setAvatarUrl("");
   };
 
   return (

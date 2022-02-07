@@ -21,4 +21,5 @@ export interface Token {
   exp: number;
   iat: number;
   id: number;
+  avatarUrl: string;
 }

@@ -10,6 +10,7 @@ import jwt_decode from "jwt-decode";
 import Header from "./components/Header";
 import SignUpModale from "./components/SignUpModale";
 import SignInModale from "./components/SignInModale";
+import WritingBox from "./components/WritingBox";
 
 const App: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -17,6 +18,7 @@ const App: React.FC = () => {
   const [isLogged, setIsLogged] = useState<boolean>(false);
   const [userId, setUserId] = useState<number>(0);
   const [accessToken, setAccessToken] = useState<string>("");
+  const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [showSignInForm, setShowSignInForm] = useState<boolean>(false);
   const [showSignUpForm, setShowSignUpForm] = useState<boolean>(false);
 
@@ -27,8 +29,9 @@ const App: React.FC = () => {
       })
       .then(res => {
         localStorage.setItem('refreshToken', res.data.refreshToken);
-        const userId = jwt_decode<Token>(res.data.accessToken).id;
-        setUserId(userId);
+        const { id, avatarUrl } = jwt_decode<Token>(res.data.accessToken);
+        setUserId(id);
+        setAvatarUrl(avatarUrl);
         setAccessToken(res.data.accessToken);
         setIsLogged(true);
       })
@@ -73,6 +76,7 @@ const App: React.FC = () => {
           setUserId={setUserId}
           setIsLogged={setIsLogged}
           setAccessToken={setAccessToken}
+          setAvatarUrl={setAvatarUrl}
         />
       )}
       <Header
@@ -82,6 +86,7 @@ const App: React.FC = () => {
         setIsLogged={setIsLogged}
         setAccessToken={setAccessToken}
         setUserId={setUserId}
+        setAvatarUrl={setAvatarUrl}
       />
       {isLoading && <Spinner size={100} />}
       {!isLoading && (
@@ -91,6 +96,12 @@ const App: React.FC = () => {
           isLogged={isLogged}
           accessToken={accessToken}
           userId={userId}
+        />
+      )}
+      {!isLoading && isLogged && (
+        <WritingBox
+          setComments={setComments}
+          avatarUrl={avatarUrl}
         />
       )}
       <Attribution />

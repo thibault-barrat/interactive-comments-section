@@ -10,9 +10,10 @@ type Props = {
   setUserId: React.Dispatch<React.SetStateAction<number>>;
   setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
   setAccessToken: React.Dispatch<React.SetStateAction<string>>;
+  setAvatarUrl: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const SignInModale: React.FC<Props> = ({ setShowSignInForm, setUserId, setIsLogged, setAccessToken }) => {
+const SignInModale: React.FC<Props> = ({ setShowSignInForm, setUserId, setIsLogged, setAccessToken, setAvatarUrl }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
@@ -41,6 +42,7 @@ const SignInModale: React.FC<Props> = ({ setShowSignInForm, setUserId, setIsLogg
         localStorage.setItem('refreshToken', res.data.refreshToken);
         setUserId(res.data.id);
         setAccessToken(res.data.accessToken);
+        setAvatarUrl(res.data.avatarUrl);
         setIsLogged(true);
         setIsLoading(false);
         setShowSignInForm(false);
