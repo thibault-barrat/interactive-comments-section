@@ -101,7 +101,9 @@ const App: React.FC = () => {
       {!isLoading && isLogged && (
         <WritingBox
           setComments={setComments}
+          userId={userId}
           avatarUrl={avatarUrl}
+          accessToken={accessToken}
         />
       )}
       <Attribution />
