@@ -93,9 +93,11 @@ const userController = {
       // we generate tokens
       const newAccessToken = generateAccessToken({
         id: user.userByEmail[0].id,
+        avatarUrl: user.userByEmail[0].avatar_url,
       });
       const newRefreshToken = generateRefreshToken({
         id: user.userByEmail[0].id,
+        avatarUrl: user.userByEmail[0].avatar_url,
       });
       // we save the refresh token in the database
       const refreshTokenObject = new RefreshToken();
@@ -104,6 +106,7 @@ const userController = {
       return res.status(200).send({
         connected: true,
         id: user.userByEmail[0].id,
+        avatarUrl: user.userByEmail[0].avatar_url,
         accessToken: newAccessToken,
         refreshToken: newRefreshToken,
       });

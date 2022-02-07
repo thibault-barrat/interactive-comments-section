@@ -23,9 +23,11 @@ const tokenController = {
     // we generate new refreshToken and accessToken
     const newRefreshToken = generateRefreshToken({
       id: decodedToken.id,
+      avatarUrl: decodedToken.avatarUrl,
     });
     const newAccessToken = generateAccessToken({
       id: decodedToken.id,
+      avatarUrl: decodedToken.avatarUrl,
     });
     // we save the new refreshToken in the database
     await tokenObject.insertNewToken(newRefreshToken);
