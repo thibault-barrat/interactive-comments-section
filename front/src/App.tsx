@@ -8,6 +8,7 @@ import CommentList from './components/CommentList';
 import axios from 'axios';
 import Header from './components/Header';
 import SignUpModale from './components/SignUpModale';
+import SignInModale from './components/SignInModale';
 
 const App: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -33,6 +34,14 @@ const App: React.FC = () => {
         <SignUpModale
           setShowSignInForm={setShowSignInForm}
           setShowSignUpForm={setShowSignUpForm}
+        />
+      )}
+      {showSignInForm && (
+        <SignInModale
+          setShowSignInForm={setShowSignInForm}
+          setUserId={setUserId}
+          setIsLogged={setIsLogged}
+          setAccessToken={setAccessToken}
         />
       )}
       <Header

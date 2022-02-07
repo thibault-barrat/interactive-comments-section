@@ -1,0 +1,54 @@
+@use '../../styles/vars';
+
+.container {
+  position: fixed;
+  background: white;
+  border: 1px solid vars.$light-gray;
+  border-radius: 5px;
+  padding: 20px;
+  width: 80%;
+  left: 50%;
+  top: 50vh;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  label {
+    align-self: stretch;
+    margin-bottom: 4px;
+    margin-top: 15px;
+  }
+  input {
+    align-self: stretch;
+    border: 1px solid vars.$light-gray;
+    border-radius: 5px;
+    padding: 10px;
+    &:focus {
+      outline: none;
+      border: 1px solid vars.$moderate-blue;
+    }
+  }
+  button, & > div {
+    margin-top: 15px;
+  }
+}
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.5rem;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.error {
+  color: vars.$soft-red;
+}
