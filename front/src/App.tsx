@@ -48,6 +48,9 @@ const App: React.FC = () => {
         isLogged={isLogged}
         setShowSignInForm={setShowSignInForm}
         setShowSignUpForm={setShowSignUpForm}
+        setIsLogged={setIsLogged}
+        setAccessToken={setAccessToken}
+        setUserId={setUserId}
       />
      {isLoading && <Spinner size={100} />}
      {!isLoading && <CommentList comments={comments} setComments={setComments} />}
