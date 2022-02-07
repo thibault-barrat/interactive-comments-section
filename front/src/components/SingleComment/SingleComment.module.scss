@@ -26,7 +26,19 @@
 
 .username {
   font-weight: 500;
-  margin-right: 15px;
+}
+
+.youTag {
+  margin-left: 7px;
+  background-color: vars.$moderate-blue;
+  color: white;
+  font-size: 0.8rem;
+  padding: 2px 5px 4px;
+  border-radius: 2px;
+}
+
+.date {
+  margin-left: 15px;
 }
 
 .content {
@@ -63,22 +75,40 @@
   color: vars.$moderate-blue;
 }
 
-.replyButton {
+.button {
   border: none;
   background: transparent;
-  grid-row: 3;
-  grid-column: 2;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   font-weight: 700;
-  color: vars.$moderate-blue;
   transition: all 0.2s ease-in-out;
+}
+
+.buttons {
+  display: flex;
+}
+
+.replyButton, .editButton {
+  color: vars.$moderate-blue;
   &:hover {
     color: vars.$light-grayish-blue;
     .icon {
       path {
         fill: vars.$light-grayish-blue;
+      }
+    }
+  }
+}
+
+.deleteButton {
+  color: vars.$soft-red;
+  margin-right: 15px;
+  &:hover {
+    color: vars.$pale-red;
+    .icon {
+      path {
+        fill: vars.$pale-red;
       }
     }
   }
