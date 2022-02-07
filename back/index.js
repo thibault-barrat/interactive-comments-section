@@ -12,7 +12,7 @@ app.use(
     extended: false,
   })
 );
-console.log(process.env.ALLOWED_ORIGIN);
+
 // configuring cors
 const corsOptions = {
   origin: process.env.ALLOWED_ORIGIN,

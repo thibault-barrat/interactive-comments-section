@@ -22,20 +22,23 @@ const userController = {
       const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (!emailRegex.test(req.body.email)) {
         return res.status(406).send({
-          errorMessage: "Email is not valid!"
+          errorMessage: "Email is not valid",
+          field: "email"
         });
       }
       // we check password with regex
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
       if (!passwordRegex.test(req.body.password)) {
         return res.status(406).send({
-          errorMessage: "Password is not valid!"
+          errorMessage: "Password must contains at least 6 characters, one uppercase letter, one number and one special character",
+          field: "password"
         });
       }
       // we check if password and confirmPassword are the same
       if (req.body.password !== req.body.confirmPassword) {
         return res.status(406).send({
-          errorMessage: "Password and confirmPassword are not the same!"
+          errorMessage: "Passwords do not match",
+          field: "confirmPassword"
         });
       }
       const user = new User(req.body);
@@ -43,13 +46,15 @@ const userController = {
       // we check if email already exists
       if (user.checkEmail) {
         return res.status(409).send({
-          errorMessage: "Email already exists!"
+          errorMessage: "Email already exists",
+          field: "email"
         });
       }
       // we check if username already exists
       if (user.checkUsername) {
         return res.status(409).send({
-          errorMessage: "Username already exists!"
+          errorMessage: "Username already exists",
+          field: "username"
         });
       }
       // if everything is ok, we send a success message
