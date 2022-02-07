@@ -17,7 +17,7 @@ const CommentList: React.FC<Props> = ({ comments, setComments }) => {
       sortedComments.splice(parentIndex + 1, 0, reply);
     }
   }
-  console.log(sortedComments);
+
   return (
     <div className={styles.container}>
       {comments.map((comment) => (
