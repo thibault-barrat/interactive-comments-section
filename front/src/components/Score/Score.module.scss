@@ -18,13 +18,18 @@
   border: none;
   padding: 15px;
   display: flex;
-  img {
-    transition: all 0.2s ease-in-out;
-  }
   &:hover {
-    img {
-      filter: hue-rotate(-1deg) saturate(70%) brightness(61%);
+    .icon {
+      path {
+        fill: vars.$moderate-blue;
+      }
     }
+  }
+}
+
+.icon {
+  path {
+    transition: all 0.2s ease-in-out;
   }
 }
 
