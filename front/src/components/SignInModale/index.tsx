@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import Button from "../Button";
 import Spinner from "../Spinner";
 import { MdOutlineClose } from "react-icons/md";
-import styles from './SignInModale.module.scss';
-import axios from 'axios';
+import styles from "./SignInModale.module.scss";
+import axios from "axios";
 
 type Props = {
   setShowSignInForm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,7 +13,13 @@ type Props = {
   setAvatarUrl: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const SignInModale: React.FC<Props> = ({ setShowSignInForm, setUserId, setIsLogged, setAccessToken, setAvatarUrl }) => {
+const SignInModale: React.FC<Props> = ({
+  setShowSignInForm,
+  setUserId,
+  setIsLogged,
+  setAccessToken,
+  setAvatarUrl,
+}) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
@@ -29,7 +35,7 @@ const SignInModale: React.FC<Props> = ({ setShowSignInForm, setUserId, setIsLogg
       setPasswordError(error.response.data.errorMessage);
     } else {
       console.log(error);
-    }      
+    }
   };
 
   const postLogin = () => {
@@ -39,7 +45,7 @@ const SignInModale: React.FC<Props> = ({ setShowSignInForm, setUserId, setIsLogg
         password,
       })
       .then((res) => {
-        localStorage.setItem('refreshToken', res.data.refreshToken);
+        localStorage.setItem("refreshToken", res.data.refreshToken);
         setUserId(res.data.id);
         setAccessToken(res.data.accessToken);
         setAvatarUrl(res.data.avatarUrl);
@@ -69,34 +75,36 @@ const SignInModale: React.FC<Props> = ({ setShowSignInForm, setUserId, setIsLogg
   };
 
   return (
-    <div className={styles.container}>
-      <MdOutlineClose
-        className={styles.close}
-        onClick={() => setShowSignInForm(false)}
-      />
-      <form className={styles.form}>
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+    <div className={styles.background}>
+      <div className={styles.container}>
+        <MdOutlineClose
+          className={styles.close}
+          onClick={() => setShowSignInForm(false)}
         />
-        {emailError && <p className={styles.error}>{emailError}</p>}
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {passwordError && <p className={styles.error}>{passwordError}</p>}
-        {isLoading ? (
-          <Spinner size={58}/>
-        ) : (
-          <Button text="Sign In" onClick={handleSignIn} />
-        )}
-      </form>
+        <form className={styles.form}>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {emailError && <p className={styles.error}>{emailError}</p>}
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {passwordError && <p className={styles.error}>{passwordError}</p>}
+          {isLoading ? (
+            <Spinner size={58} />
+          ) : (
+            <Button text="Sign In" onClick={handleSignIn} type="submit" />
+          )}
+        </form>
+      </div>
     </div>
   );
 };

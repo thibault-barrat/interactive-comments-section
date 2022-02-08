@@ -64,6 +64,7 @@ const WritingBox: React.FC<Props> = ({ avatarUrl, userId, setComments, accessTok
         <Button
           text="Send"
           onClick={handleSubmit}
+          type="submit"
         />
       </form>
     </div>

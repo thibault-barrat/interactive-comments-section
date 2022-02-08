@@ -125,56 +125,58 @@ const SignUpModale: React.FC<Props> = ({
   };
 
   return (
-    <div className={styles.container}>
-      <MdOutlineClose
-        className={styles.close}
-        onClick={() => setShowSignUpForm(false)}
-      />
-      <form className={styles.form}>
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          onBlur={checkUsername}
+    <div className={styles.background}>
+      <div className={styles.container}>
+        <MdOutlineClose
+          className={styles.close}
+          onClick={() => setShowSignUpForm(false)}
         />
-        {usernameError && <p className={styles.error}>{usernameError}</p>}
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          onBlur={checkEmail}
-        />
-        {emailError && <p className={styles.error}>{emailError}</p>}
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onBlur={checkPassword}
-        />
-        {passwordError && <p className={styles.error}>{passwordError}</p>}
-        <label htmlFor="confirm-password">Confirm your password</label>
-        <input
-          type="password"
-          id="confirm-password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          onBlur={checkConfirmedPassword}
-        />
-        {confirmPasswordError && (
-          <p className={styles.error}>{confirmPasswordError}</p>
-        )}
-        {isLoading ? (
-          <Spinner size={58}/>
-        ) : (
-          <Button text="Sign Up" onClick={handleSignUp} />
-        )}
-      </form>
+        <form className={styles.form}>
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            onBlur={checkUsername}
+          />
+          {usernameError && <p className={styles.error}>{usernameError}</p>}
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={checkEmail}
+          />
+          {emailError && <p className={styles.error}>{emailError}</p>}
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onBlur={checkPassword}
+          />
+          {passwordError && <p className={styles.error}>{passwordError}</p>}
+          <label htmlFor="confirm-password">Confirm your password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            onBlur={checkConfirmedPassword}
+          />
+          {confirmPasswordError && (
+            <p className={styles.error}>{confirmPasswordError}</p>
+          )}
+          {isLoading ? (
+            <Spinner size={58} />
+          ) : (
+            <Button text="Sign Up" onClick={handleSignUp} type="submit" />
+          )}
+        </form>
+      </div>
     </div>
   );
 };

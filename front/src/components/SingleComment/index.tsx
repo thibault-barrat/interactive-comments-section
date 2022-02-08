@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Comment } from "../../models";
 import styles from "./SingleComment.module.scss";
 import timeSince from "../../utils/timeSince";
 import Score from "../Score";
+import DeleteModale from "../DeleteModale";
 
 type Props = {
   comments: Comment[];
@@ -21,14 +22,37 @@ const SingleComment: React.FC<Props> = ({
   accessToken,
   userId,
 }) => {
+  const [showDeleteModale, setShowDeleteModale] = useState<boolean>(false);
   const comment = comments.find((comment) => comment.id === id)!;
   const isReply = comment.replying_to !== null;
+
+  // we want to disable body scrolling when modale is open
+  useEffect(() => {
+    if (showDeleteModale) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    }
+  }, [showDeleteModale]);
+
   return (
     <div
       className={`${styles.container} ${
         isReply ? styles.reply : styles.parent
       }`}
     >
+      {showDeleteModale && (
+        <DeleteModale
+          commentId={id}
+          setComments={setComments}
+          comments={comments}
+          accessToken={accessToken}
+          setShowDeleteModale={setShowDeleteModale}
+        />
+      )}
       <div className={styles.heading}>
         <img
           className={styles.avatar}
@@ -80,7 +104,7 @@ const SingleComment: React.FC<Props> = ({
           <button
             className={`${styles.button} ${styles.deleteButton}`}
             type="button"
-            onClick={() => {}}
+            onClick={() => {setShowDeleteModale(true)}}
           >
             <svg
               width="12"

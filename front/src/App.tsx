@@ -62,6 +62,15 @@ const App: React.FC = () => {
     }
   }, []);
 
+  // we want to disable body scrolling when signin modale or signup is open
+  useEffect(() => {
+    if (showSignInForm || showSignUpForm) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [showSignInForm, showSignUpForm]);
+   
   return (
     <div className={styles.app}>
       {showSignUpForm && (

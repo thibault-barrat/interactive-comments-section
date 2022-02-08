@@ -28,11 +28,11 @@ const Header: React.FC<Props> = ({ isLogged, setShowSignInForm, setShowSignUpFor
   return (
     <div className={styles.header}>
       {isLogged ? (
-        <Button text="Sign Out" onClick={handleSignOut} />
+        <Button text="Sign Out" onClick={handleSignOut} type="button" />
       ) : (
         <>
-          <Button text="Sign In" onClick={() => setShowSignInForm(true)} />
-          <Button text="Sign Up" onClick={() => setShowSignUpForm(true)} />
+          <Button text="Sign In" onClick={() => setShowSignInForm(true)} type="button" />
+          <Button text="Sign Up" onClick={() => setShowSignUpForm(true)} type="button" />
         </>
       )}
     </div>
