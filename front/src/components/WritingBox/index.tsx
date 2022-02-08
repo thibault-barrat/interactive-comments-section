@@ -22,7 +22,8 @@ const WritingBox: React.FC<Props> = ({ avatarUrl, userId, setComments, accessTok
       });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     if (content.length === 0) {
       return;
     }

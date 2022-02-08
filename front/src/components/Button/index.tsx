@@ -3,7 +3,7 @@ import styles from './Button.module.scss';
 
 type Props = {
   text: string;
-  onClick: () => void;
+  onClick: (e: React.FormEvent) => void;
   color?: string;
   type: "button" | "submit" | "reset";
 }
@@ -12,7 +12,7 @@ const Button: React.FC<Props> = ({ text, onClick, color, type }) => {
   return (
     <button
       className={`${styles.button} ${color ? `${styles[color]}` : ""}`}
-      onClick={onClick}
+      onClick={(e) => onClick(e)}
       type={type}
     >
       {text}
