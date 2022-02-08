@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Comment } from "../../models";
 import styles from "./SingleComment.module.scss";
 import timeSince from "../../utils/timeSince";
 import Score from "../Score";
 import DeleteModale from "../DeleteModale";
+import Button from "../Button";
+import axios from "axios";
 
 type Props = {
   comments: Comment[];
@@ -23,9 +25,15 @@ const SingleComment: React.FC<Props> = ({
   userId,
 }) => {
   const [showDeleteModale, setShowDeleteModale] = useState<boolean>(false);
+
   const comment = comments.find((comment) => comment.id === id)!;
   const isReply = comment.replying_to !== null;
-  
+
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editContent, setEditContent] = useState<string>(comment.content);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   // we need to check if content contains words beginning with @
   // is so, we put it in a span with className "mention"
   let content: (string | JSX.Element)[] = [];
@@ -52,8 +60,52 @@ const SingleComment: React.FC<Props> = ({
     }
     return () => {
       document.body.style.overflow = "auto";
-    }
+    };
   }, [showDeleteModale]);
+
+  // put focus on t"ext area when we edit a comment
+  useEffect(() => {
+    if (isEditing) {
+      textareaRef.current?.focus();
+    }
+  }, [isEditing]);
+
+  // resize textarea when content changes
+  useEffect(() => {
+    if (textareaRef.current && isEditing) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height =
+        textareaRef.current.scrollHeight + "px";
+    }
+  }, [editContent, isEditing]);
+
+  const handleUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
+    axios
+      .patch(
+        process.env.REACT_APP_API_URL + `/updateComment/${id}`,
+        {
+          content: editContent,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then(() => {
+        setIsEditing(false);
+        setComments((comments) =>
+          comments.map((comment) =>
+            comment.id === id ? { ...comment, content: editContent } : comment
+          )
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
 
   return (
     <div
@@ -84,9 +136,21 @@ const SingleComment: React.FC<Props> = ({
           new Date(comment.created_at)
         )} ago`}</p>
       </div>
-      <p className={styles.content}>
-        {content}
-      </p>
+      <form className={styles.content}>
+        {isEditing ? (
+          <>
+            <textarea
+              className={styles.editContent}
+              value={editContent}
+              onChange={(e) => setEditContent(e.target.value)}
+              ref={textareaRef}
+            />
+            <Button text="Update" onClick={handleUpdate} type="submit" />
+          </>
+        ) : (
+          <p className={styles.contentText}>{content}</p>
+        )}
+      </form>
       <Score comments={comments} id={comment.id} setComments={setComments} />
       {isLogged && userId !== comment.user.id && (
         <button
@@ -116,7 +180,9 @@ const SingleComment: React.FC<Props> = ({
           <button
             className={`${styles.button} ${styles.deleteButton}`}
             type="button"
-            onClick={() => {setShowDeleteModale(true)}}
+            onClick={() => {
+              setShowDeleteModale(true);
+            }}
           >
             <svg
               width="12"
@@ -137,7 +203,7 @@ const SingleComment: React.FC<Props> = ({
           <button
             className={`${styles.button} ${styles.editButton}`}
             type="button"
-            onClick={() => {}}
+            onClick={() => setIsEditing(true)}
           >
             <svg
               width="14"
