@@ -25,6 +25,23 @@ const SingleComment: React.FC<Props> = ({
   const [showDeleteModale, setShowDeleteModale] = useState<boolean>(false);
   const comment = comments.find((comment) => comment.id === id)!;
   const isReply = comment.replying_to !== null;
+  
+  // we need to check if content contains words beginning with @
+  // is so, we put it in a span with className "mention"
+  let content: (string | JSX.Element)[] = [];
+  comment.content.split(" ").forEach((word, index) => {
+    if (word.startsWith("@")) {
+      content.push(
+        <span className={styles.mention} key={word + index}>
+          {word + " "}
+        </span>
+      );
+    } else if (typeof content[content.length - 1] === "string") {
+      content[content.length - 1] += word + " ";
+    } else {
+      content.push(word + " ");
+    }
+  });
 
   // we want to disable body scrolling when modale is open
   useEffect(() => {
@@ -68,12 +85,7 @@ const SingleComment: React.FC<Props> = ({
         )} ago`}</p>
       </div>
       <p className={styles.content}>
-        {isReply && (
-          <span className={styles.answerTo}>{`@${
-            comments.find((c) => c.id === comment.replying_to)?.user.username
-          } `}</span>
-        )}
-        {comment.content}
+        {content}
       </p>
       <Score comments={comments} id={comment.id} setComments={setComments} />
       {isLogged && userId !== comment.user.id && (
