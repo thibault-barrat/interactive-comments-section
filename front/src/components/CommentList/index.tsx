@@ -1,17 +1,11 @@
 import React from "react";
-import { Comment } from "../../models";
 import SingleComment from "../SingleComment";
 import styles from "./CommentList.module.scss";
+import { useAppState } from "../../utils/context";
 
-type Props = {
-  comments: Comment[];
-  setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
-  isLogged: boolean;
-  accessToken: string;
-  userId: number;
-};
+const CommentList = () => {
 
-const CommentList: React.FC<Props> = ({ comments, setComments, isLogged, accessToken, userId }) => {
+  const { comments } = useAppState();
   let sortedComments = comments.filter((comment) => comment.replying_to === null);
   let replies = comments.filter((comment) => comment.replying_to !== null);
   for (const reply of replies) {
@@ -26,12 +20,7 @@ const CommentList: React.FC<Props> = ({ comments, setComments, isLogged, accessT
       {comments.map((comment) => (
         <SingleComment
           key={comment.id}
-          id={comment.id}
-          comments={comments}
-          setComments={setComments}
-          isLogged={isLogged}
-          accessToken={accessToken}
-          userId={userId}
+          comment={comment}
         />
       ))}
     </div>

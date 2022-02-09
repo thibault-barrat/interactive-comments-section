@@ -1,16 +1,17 @@
 import React from "react";
 import styles from "./Score.module.scss";
-import { Comment, Score as ScoreObject } from "../../models";
+import { Score as ScoreObject } from "../../utils/models";
 import axios from "axios";
+import { useAppDispatch } from "../../utils/context";
+import { ACTION_TYPES } from "../../store/actions";
 
 type Props = {
-  comments: Comment[];
+  score: number;
   id: number;
-  setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
 };
 
-const Score: React.FC<Props> = ({ comments, id, setComments }) => {
-  const score = comments.find((comment) => comment.id === id)!.score;
+const Score: React.FC<Props> = ({ score, id }) => {
+  const dispatch = useAppDispatch();
   const handleIncreaseScore = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     axios
@@ -18,13 +19,7 @@ const Score: React.FC<Props> = ({ comments, id, setComments }) => {
         `${process.env.REACT_APP_API_URL}/increaseCommentScore/${id}`
       )
       .then((res) => {
-        const newComments = comments.map((comment) => {
-          if (comment.id === id) {
-            return { ...comment, score: res.data.score };
-          }
-          return comment;
-        });
-        setComments(newComments);
+        dispatch({ type: ACTION_TYPES.UPDATE_SCORE, payload: {id, score: res.data.score} });
       });
   };
 
@@ -35,13 +30,7 @@ const Score: React.FC<Props> = ({ comments, id, setComments }) => {
         `${process.env.REACT_APP_API_URL}/decreaseCommentScore/${id}`
       )
       .then((res) => {
-        const newComments = comments.map((comment) => {
-          if (comment.id === id) {
-            return { ...comment, score: res.data.score };
-          }
-          return comment;
-        });
-        setComments(newComments);
+        dispatch({ type: ACTION_TYPES.UPDATE_SCORE, payload: {id, score: res.data.score} });
       });
   };
 

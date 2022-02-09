@@ -1,38 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "../Button";
 import Spinner from "../Spinner";
 import { MdOutlineClose } from "react-icons/md";
 import styles from "./SignInModale.module.scss";
 import axios from "axios";
+import { useAppDispatch, useAppState } from "../../utils/context";
+import { ACTION_TYPES } from "../../store/actions";
 
-type Props = {
-  setShowSignInForm: React.Dispatch<React.SetStateAction<boolean>>;
-  setUserId: React.Dispatch<React.SetStateAction<number>>;
-  setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
-  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
-  setAvatarUrl: React.Dispatch<React.SetStateAction<string>>;
-};
+const SignInModale = () => {
 
-const SignInModale: React.FC<Props> = ({
-  setShowSignInForm,
-  setUserId,
-  setIsLogged,
-  setAccessToken,
-  setAvatarUrl,
-}) => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [emailError, setEmailError] = useState<string>("");
-  const [passwordError, setPasswordError] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { email, password, loading, emailError, passwordError } = useAppState().loginForm;
+
+  const dispatch = useAppDispatch();
 
   const handleLoginError = (error: any) => {
     if (error.response.status === 404) {
-      setEmailError(error.response.data.errorMessage);
-      setPasswordError("");
+      dispatch({ type: ACTION_TYPES.UPDATE_LOGIN_FORM_ERROR, payload: {
+        emailError: error.response.data.errorMessage,
+        passwordError: ""
+      } });
     } else if (error.response.status === 401) {
-      setEmailError("");
-      setPasswordError(error.response.data.errorMessage);
+      dispatch({ type: ACTION_TYPES.UPDATE_LOGIN_FORM_ERROR, payload: {
+        emailError: "",
+        passwordError: error.response.data.errorMessage
+      } });
     } else {
       console.log(error);
     }
@@ -46,31 +37,52 @@ const SignInModale: React.FC<Props> = ({
       })
       .then((res) => {
         localStorage.setItem("refreshToken", res.data.refreshToken);
-        setUserId(res.data.id);
-        setAccessToken(res.data.accessToken);
-        setAvatarUrl(res.data.avatarUrl);
-        setIsLogged(true);
-        setIsLoading(false);
-        setShowSignInForm(false);
+        dispatch({
+          type: ACTION_TYPES.LOGIN_SUCCESS,
+          payload: {
+            id: res.data.id,
+            accessToken: res.data.accessToken,
+            avatarUrl: res.data.avatarUrl,
+          },
+        });
       })
       .catch((err) => {
-        setIsLoading(false);
         handleLoginError(err);
       });
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = (e: React.FormEvent) => {
+    e.preventDefault();
     if (email.length === 0) {
-      setEmailError("Email is required");
+      dispatch({
+        type: ACTION_TYPES.UPDATE_LOGIN_FORM_ERROR,
+        payload: {
+          emailError: "Email is required",
+          passwordError: "",
+        },
+      });
       return;
     }
     if (password.length === 0) {
-      setPasswordError("Password is required");
+      dispatch({
+        type: ACTION_TYPES.UPDATE_LOGIN_FORM_ERROR,
+        payload: {
+          emailError: "",
+          passwordError: "Password is required",
+        },
+      });
       return;
     }
-    setEmailError("");
-    setPasswordError("");
-    setIsLoading(true);
+    dispatch({
+      type: ACTION_TYPES.UPDATE_LOGIN_FORM_ERROR,
+      payload: {
+        emailError: "",
+        passwordError: "",
+      },
+    });
+    dispatch({
+      type: ACTION_TYPES.LOGIN,
+    });
     postLogin();
   };
 
@@ -79,7 +91,7 @@ const SignInModale: React.FC<Props> = ({
       <div className={styles.container}>
         <MdOutlineClose
           className={styles.close}
-          onClick={() => setShowSignInForm(false)}
+          onClick={() => dispatch({ type: ACTION_TYPES.HIDE_LOGIN_FORM })}
         />
         <form className={styles.form}>
           <label htmlFor="email">Email</label>
@@ -87,7 +99,7 @@ const SignInModale: React.FC<Props> = ({
             type="email"
             id="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => dispatch({ type: ACTION_TYPES.CHANGE_LOGIN_FORM_FIELD, payload: {field: "email", value: e.target.value} })}
           />
           {emailError && <p className={styles.error}>{emailError}</p>}
           <label htmlFor="password">Password</label>
@@ -95,10 +107,10 @@ const SignInModale: React.FC<Props> = ({
             type="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => dispatch({ type: ACTION_TYPES.CHANGE_LOGIN_FORM_FIELD, payload: {field: "password", value: e.target.value} })}
           />
           {passwordError && <p className={styles.error}>{passwordError}</p>}
-          {isLoading ? (
+          {loading ? (
             <Spinner size={58} />
           ) : (
             <Button text="Sign In" onClick={handleSignIn} type="submit" />

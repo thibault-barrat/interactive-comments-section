@@ -1,28 +1,20 @@
 import React from "react";
+import { useAppDispatch, useAppState } from "../../utils/context";
 import Button from "../Button";
 import styles from "./Header.module.scss";
 import axios from "axios";
+import { ACTION_TYPES } from "../../store/actions";
 
-type Props = {
-  isLogged: boolean;
-  setShowSignInForm: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowSignUpForm: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
-  setAccessToken: React.Dispatch<React.SetStateAction<string>>;
-  setUserId: React.Dispatch<React.SetStateAction<number>>;
-  setAvatarUrl: React.Dispatch<React.SetStateAction<string>>;
-};
+const Header = () => {
+  const { isLogged } = useAppState();
+  const dispatch = useAppDispatch();
 
-const Header: React.FC<Props> = ({ isLogged, setShowSignInForm, setShowSignUpForm, setIsLogged, setAccessToken, setUserId, setAvatarUrl }) => {
   const handleSignOut = () => {
     axios.post(process.env.REACT_APP_API_URL + "/logout", {
       refreshToken: localStorage.getItem("refreshToken")
     });
     localStorage.removeItem("refreshToken");
-    setIsLogged(false);
-    setAccessToken("");
-    setUserId(0);
-    setAvatarUrl("");
+    dispatch({ type: ACTION_TYPES.LOGOUT });
   };
 
   return (
@@ -31,8 +23,8 @@ const Header: React.FC<Props> = ({ isLogged, setShowSignInForm, setShowSignUpFor
         <Button text="Sign Out" onClick={handleSignOut} type="button" />
       ) : (
         <>
-          <Button text="Sign In" onClick={() => setShowSignInForm(true)} type="button" />
-          <Button text="Sign Up" onClick={() => setShowSignUpForm(true)} type="button" />
+          <Button text="Sign In" onClick={() => dispatch({type: ACTION_TYPES.SHOW_LOGIN_FORM})} type="button" />
+          <Button text="Sign Up" onClick={() => dispatch({type: ACTION_TYPES.SHOW_SIGNUP_FORM})} type="button" />
         </>
       )}
     </div>

@@ -1,36 +1,46 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "../Button";
 import Spinner from "../Spinner";
 import { MdOutlineClose } from "react-icons/md";
 import styles from "./SignUpModale.module.scss";
 import axios from "axios";
+import { useAppDispatch, useAppState } from "../../utils/context";
+import { ACTION_TYPES } from "../../store/actions";
 
-type Props = {
-  setShowSignInForm: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowSignUpForm: React.Dispatch<React.SetStateAction<boolean>>;
-};
+const SignUpModale = () => {
+  const {
+    username,
+    email,
+    password,
+    confirmPassword,
+    usernameError,
+    emailError,
+    passwordError,
+    confirmPasswordError,
+    loading,
+  } = useAppState().signupForm;
 
-const SignUpModale: React.FC<Props> = ({
-  setShowSignInForm,
-  setShowSignUpForm,
-}) => {
-  const [username, setUsername] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [usernameError, setUsernameError] = useState<string>("");
-  const [emailError, setEmailError] = useState<string>("");
-  const [passwordError, setPasswordError] = useState<string>("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   // function to verify that username is not empty
   const checkUsername = (): boolean => {
     if (username.length === 0) {
-      setUsernameError("Username is required");
+      dispatch({
+        type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR,
+        payload: {
+          field: "usernameError",
+          error: "Username is required",
+        },
+      });
       return false;
     } else {
-      setUsernameError("");
+      dispatch({
+        type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR,
+        payload: {
+          field: "usernameError",
+          error: "",
+        },
+      });
       return true;
     }
   };
@@ -42,10 +52,22 @@ const SignUpModale: React.FC<Props> = ({
         email
       )
     ) {
-      setEmailError("Email is not valid");
+      dispatch({
+        type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR,
+        payload: {
+          field: "emailError",
+          error: "Email is invalid",
+        },
+      });
       return false;
     } else {
-      setEmailError("");
+      dispatch({
+        type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR,
+        payload: {
+          field: "emailError",
+          error: "",
+        },
+      });
       return true;
     }
   };
@@ -55,12 +77,23 @@ const SignUpModale: React.FC<Props> = ({
     if (
       !/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{6,}/.test(password)
     ) {
-      setPasswordError(
-        "Password must contains at least 6 characters, one uppercase letter, one number and one special character"
-      );
+      dispatch({
+        type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR,
+        payload: {
+          field: "passwordError",
+          error:
+            "Password must contains at least 6 characters, one uppercase letter, one number and one special character",
+        },
+      });
       return false;
     } else {
-      setPasswordError("");
+      dispatch({
+        type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR,
+        payload: {
+          field: "passwordError",
+          error: "",
+        },
+      });
       return true;
     }
   };
@@ -68,10 +101,22 @@ const SignUpModale: React.FC<Props> = ({
   // function to verify that the confirmed password matches the password
   const checkConfirmedPassword = (): boolean => {
     if (password !== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match");
+      dispatch({
+        type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR,
+        payload: {
+          field: "confirmPasswordError",
+          error: "Passwords do not match",
+        },
+      });
       return false;
     } else {
-      setConfirmPasswordError("");
+      dispatch({
+        type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR,
+        payload: {
+          field: "confirmPasswordError",
+          error: "",
+        },
+      });
       return true;
     }
   };
@@ -79,14 +124,38 @@ const SignUpModale: React.FC<Props> = ({
   const handlePostError = (error: any): void => {
     if (error.response.status === 406 || error.response.status === 409) {
       if (error.response.data.field === "username") {
-        setUsernameError(error.response.data.errorMessage);
+        dispatch({
+          type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR,
+          payload: {
+            field: "usernameError",
+            error: error.response.data.errorMessage,
+          },
+        });
       } else if (error.response.data.field === "email") {
-        setEmailError(error.response.data.errorMessage);
-      } else if (error.response.data.field === "password") {
-        setPasswordError(error.response.data.errorMessage);
-      } else if (error.response.data.field === "confirmPassword") {
-        setConfirmPasswordError(error.response.data.errorMessage);
+        dispatch({
+          type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR,
+          payload: {
+            field: "emailError",
+            error: error.response.data.errorMessage,
+          },
+        });
       }
+    } else if (error.response.data.field === "password") {
+      dispatch({
+        type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR,
+        payload: {
+          field: "passwordError",
+          error: error.response.data.errorMessage,
+        },
+      });
+    } else if (error.response.data.field === "confirmPassword") {
+      dispatch({
+        type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR,
+        payload: {
+          field: "confirmPasswordError",
+          error: error.response.data.errorMessage,
+        },
+      });
     } else {
       console.log(error);
     }
@@ -101,25 +170,27 @@ const SignUpModale: React.FC<Props> = ({
         confirmPassword,
       })
       .then((res) => {
-        setIsLoading(false);
-        setShowSignUpForm(false);
-        setShowSignInForm(true);
+        dispatch({
+          type: ACTION_TYPES.SIGNUP_SUCCESS,
+        });
       })
       .catch((err) => {
-        setIsLoading(false);
         handlePostError(err);
       });
   };
 
   // function to handle sign up action
-  const handleSignUp = () => {
+  const handleSignUp = (e: React.FormEvent) => {
+    e.preventDefault();
     if (
       checkUsername() &&
       checkEmail() &&
       checkPassword() &&
       checkConfirmedPassword()
     ) {
-      setIsLoading(true);
+      dispatch({
+        type: ACTION_TYPES.SIGNUP,
+      });
       postUser();
     }
   };
@@ -129,7 +200,7 @@ const SignUpModale: React.FC<Props> = ({
       <div className={styles.container}>
         <MdOutlineClose
           className={styles.close}
-          onClick={() => setShowSignUpForm(false)}
+          onClick={() => dispatch({ type: ACTION_TYPES.HIDE_SIGNUP_FORM })}
         />
         <form className={styles.form}>
           <label htmlFor="username">Username</label>
@@ -137,7 +208,7 @@ const SignUpModale: React.FC<Props> = ({
             type="text"
             id="username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => dispatch({ type: ACTION_TYPES.CHANGE_SIGNUP_FORM_FIELD, payload: { field: "username", value: e.target.value } })}
             onBlur={checkUsername}
           />
           {usernameError && <p className={styles.error}>{usernameError}</p>}
@@ -146,7 +217,7 @@ const SignUpModale: React.FC<Props> = ({
             type="email"
             id="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => dispatch({ type: ACTION_TYPES.CHANGE_SIGNUP_FORM_FIELD, payload: { field: "email", value: e.target.value } })}
             onBlur={checkEmail}
           />
           {emailError && <p className={styles.error}>{emailError}</p>}
@@ -155,7 +226,7 @@ const SignUpModale: React.FC<Props> = ({
             type="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => dispatch({ type: ACTION_TYPES.CHANGE_SIGNUP_FORM_FIELD, payload: { field: "password", value: e.target.value } })}
             onBlur={checkPassword}
           />
           {passwordError && <p className={styles.error}>{passwordError}</p>}
@@ -164,13 +235,13 @@ const SignUpModale: React.FC<Props> = ({
             type="password"
             id="confirm-password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e) => dispatch({ type: ACTION_TYPES.CHANGE_SIGNUP_FORM_FIELD, payload: { field: "confirmPassword", value: e.target.value } })}
             onBlur={checkConfirmedPassword}
           />
           {confirmPasswordError && (
             <p className={styles.error}>{confirmPasswordError}</p>
           )}
-          {isLoading ? (
+          {loading ? (
             <Spinner size={58} />
           ) : (
             <Button text="Sign Up" onClick={handleSignUp} type="submit" />

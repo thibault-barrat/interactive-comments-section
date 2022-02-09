@@ -1,32 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Comment } from "../../models";
+import { Comment } from "../../utils/models";
 import styles from "./SingleComment.module.scss";
 import timeSince from "../../utils/timeSince";
 import Score from "../Score";
 import DeleteModale from "../DeleteModale";
 import Button from "../Button";
 import axios from "axios";
+import { useAppDispatch, useAppState } from "../../utils/context";
+import { ACTION_TYPES } from "../../store/actions";
 
 type Props = {
-  comments: Comment[];
-  id: number;
-  setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
-  isLogged: boolean;
-  accessToken: string;
-  userId: number;
+  comment: Comment;
 };
 
-const SingleComment: React.FC<Props> = ({
-  comments,
-  id,
-  setComments,
-  isLogged,
-  accessToken,
-  userId,
-}) => {
+const SingleComment: React.FC<Props> = ({ comment }) => {
+  const { id, accessToken, isLogged } = useAppState();
+  const dispatch = useAppDispatch();
   const [showDeleteModale, setShowDeleteModale] = useState<boolean>(false);
 
-  const comment = comments.find((comment) => comment.id === id)!;
   const isReply = comment.replying_to !== null;
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -63,7 +54,7 @@ const SingleComment: React.FC<Props> = ({
     };
   }, [showDeleteModale]);
 
-  // put focus on t"ext area when we edit a comment
+  // put focus on text area when we edit a comment
   useEffect(() => {
     if (isEditing) {
       textareaRef.current?.focus();
@@ -83,7 +74,7 @@ const SingleComment: React.FC<Props> = ({
     e.preventDefault();
     axios
       .patch(
-        process.env.REACT_APP_API_URL + `/updateComment/${id}`,
+        process.env.REACT_APP_API_URL + `/updateComment/${comment.id}`,
         {
           content: editContent,
         },
@@ -95,17 +86,18 @@ const SingleComment: React.FC<Props> = ({
       )
       .then(() => {
         setIsEditing(false);
-        setComments((comments) =>
-          comments.map((comment) =>
-            comment.id === id ? { ...comment, content: editContent } : comment
-          )
-        );
+        dispatch({
+          type: ACTION_TYPES.UPDATE_COMMENT,
+          payload: {
+            id: comment.id,
+            content: editContent,
+          },
+        });
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
 
   return (
     <div
@@ -115,10 +107,7 @@ const SingleComment: React.FC<Props> = ({
     >
       {showDeleteModale && (
         <DeleteModale
-          commentId={id}
-          setComments={setComments}
-          comments={comments}
-          accessToken={accessToken}
+          id={comment.id}
           setShowDeleteModale={setShowDeleteModale}
         />
       )}
@@ -129,7 +118,7 @@ const SingleComment: React.FC<Props> = ({
           alt={`${comment.user.username}'s avatar`}
         />
         <p className={styles.username}>{comment.user.username}</p>
-        {isLogged && comment.user.id === userId && (
+        {isLogged && comment.user.id === id && (
           <span className={styles.youTag}>you</span>
         )}
         <p className={styles.date}>{`${timeSince(
@@ -151,8 +140,8 @@ const SingleComment: React.FC<Props> = ({
           <p className={styles.contentText}>{content}</p>
         )}
       </form>
-      <Score comments={comments} id={comment.id} setComments={setComments} />
-      {isLogged && userId !== comment.user.id && (
+      <Score score={comment.score} id={comment.id} />
+      {isLogged && id !== comment.user.id && (
         <button
           className={`${styles.button} ${styles.replyButton}`}
           type="button"
@@ -175,7 +164,7 @@ const SingleComment: React.FC<Props> = ({
           Reply
         </button>
       )}
-      {isLogged && userId === comment.user.id && (
+      {isLogged && id === comment.user.id && (
         <div className={styles.buttons}>
           <button
             className={`${styles.button} ${styles.deleteButton}`}

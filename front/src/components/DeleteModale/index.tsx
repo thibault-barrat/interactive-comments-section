@@ -1,18 +1,18 @@
 import React from "react";
 import styles from "./DeleteModale.module.scss";
-import { Comment } from "../../models";
 import Button from "../Button";
 import axios from "axios";
+import { useAppDispatch, useAppState } from "../../utils/context";
+import { ACTION_TYPES } from "../../store/actions";
 
 type Props = {
-  commentId: number;
-  setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
-  comments: Comment[];
-  accessToken: string;
+  id: number;
   setShowDeleteModale: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const DeleteModale: React.FC<Props> = ({ commentId, setComments, comments, accessToken, setShowDeleteModale }) => {
+const DeleteModale: React.FC<Props> = ({ id, setShowDeleteModale }) => {
+  const { accessToken } = useAppState();
+  const dispatch = useAppDispatch();
   const handleDelete = () => {
     const header = {
       headers: {
@@ -20,9 +20,9 @@ const DeleteModale: React.FC<Props> = ({ commentId, setComments, comments, acces
       },
     };
     axios
-      .delete(process.env.REACT_APP_API_URL + `/deleteComment/${commentId}`, header)
+      .delete(process.env.REACT_APP_API_URL + `/deleteComment/${id}`, header)
       .then(() => {
-        setComments(comments.filter((comment) => comment.id !== commentId));
+        dispatch({ type: ACTION_TYPES.DELETE_COMMENT, payload: id });
         setShowDeleteModale(false);
       })
       .catch((err) => {
