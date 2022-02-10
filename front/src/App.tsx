@@ -75,28 +75,6 @@ const App: React.FC = () => {
     }
   );
 
-  const refreshToken = (token: string) => {
-    axios
-      .post(process.env.REACT_APP_API_URL + "/refreshToken", {
-        refreshToken: token,
-      })
-      .then((res) => {
-        localStorage.setItem("refreshToken", res.data.refreshToken);
-        const { id, avatarUrl } = jwt_decode<Token>(res.data.accessToken);
-        dispatch({
-          type: ACTION_TYPES.LOGIN_SUCCESS,
-          payload: {
-            id,
-            avatarUrl,
-            accessToken: res.data.accessToken,
-          },
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   const fetchComments = () => {
     axios
       .get<Comment[]>(process.env.REACT_APP_API_URL + "/allComments")
@@ -110,8 +88,37 @@ const App: React.FC = () => {
 
   // at first render, fetch the comments and check refresh token
   useEffect(() => {
+    const refreshToken = (token: string) => {
+      axios
+        .post(process.env.REACT_APP_API_URL + "/refreshToken", {
+          refreshToken: token,
+        })
+        .then((res) => {
+          localStorage.setItem("refreshToken", res.data.refreshToken);
+          const { id, avatarUrl } = jwt_decode<Token>(res.data.accessToken);
+          dispatch({
+            type: ACTION_TYPES.LOGIN_SUCCESS,
+            payload: {
+              id,
+              avatarUrl,
+              accessToken: res.data.accessToken,
+            },
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
     dispatch({ type: ACTION_TYPES.GET_COMMENTS });
-    fetchComments();
+    axios
+      .get<Comment[]>(process.env.REACT_APP_API_URL + "/allComments")
+      .then((res) => {
+        dispatch({
+          type: ACTION_TYPES.GET_COMMENTS_SUCCESS,
+          payload: res.data,
+        });
+      });
     const token = localStorage.getItem("refreshToken");
     if (token) {
       // we check if the token is expired
@@ -124,7 +131,7 @@ const App: React.FC = () => {
         refreshToken(token);
       }
     }
-  }, []);
+  }, [dispatch]);
 
   // we want to disable body scrolling when signin modale or signup is open
   useEffect(() => {
