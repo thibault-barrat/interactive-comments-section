@@ -10,25 +10,25 @@ VALUES
   (
     'juliusomo',
     'juliusomo@example.com',
-    '$2b$10$ZFRIcpp3bhKSes2hP7hbJON/6qageL37C0ugZkyMBZLhOC1eXvWuC',
+    '$2b$10$gGt9wYrZiL1tL7QwIoeQ5OHaJds/vZKtjZ3.Ub4WVoCEc9RHSwMPS',
     'image-juliusomo.png'
   ),
   (
     'amyrobson',
     'amyrobson@example.com',
-    '$2b$10$ZFRIcpp3bhKSes2hP7hbJON/6qageL37C0ugZkyMBZLhOC1eXvWuC',
+    '$2b$10$gGt9wYrZiL1tL7QwIoeQ5OHaJds/vZKtjZ3.Ub4WVoCEc9RHSwMPS',
     'image-amyrobson.png'
   ),
   (
     'maxblagun',
     'maxblagun@example.com',
-    '$2b$10$ZFRIcpp3bhKSes2hP7hbJON/6qageL37C0ugZkyMBZLhOC1eXvWuC',
+    '$2b$10$gGt9wYrZiL1tL7QwIoeQ5OHaJds/vZKtjZ3.Ub4WVoCEc9RHSwMPS',
     'image-maxblagun.png'
   ),
   (
     'ramsesmiron',
     'ramsesmiron@example.com',
-    '$2b$10$ZFRIcpp3bhKSes2hP7hbJON/6qageL37C0ugZkyMBZLhOC1eXvWuC',
+    '$2b$10$gGt9wYrZiL1tL7QwIoeQ5OHaJds/vZKtjZ3.Ub4WVoCEc9RHSwMPS',
     'image-ramsesmiron.png'
   );
 INSERT INTO
