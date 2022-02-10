@@ -17,7 +17,7 @@ const CommentList = () => {
 
   return (
     <div className={styles.container}>
-      {comments.map((comment) => (
+      {sortedComments.map((comment) => (
         <SingleComment
           key={comment.id}
           comment={comment}

@@ -16,7 +16,6 @@ export enum ACTION_TYPES {
   UPDATE_SIGNUP_FORM_ERROR = "UPDATE_SIGNUP_FORM_ERROR",
   GET_COMMENTS = "GET_COMMENTS",
   GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS",
-  CHANGE_NEW_COMMENT_CONTENT = "CHANGE_NEW_COMMENT_CONTENT",
   UPDATE_COMMENT = "UPDATE_COMMENT",
   DELETE_COMMENT = "DELETE_COMMENT",
   UPDATE_SCORE = "UPDATE_SCORE",
@@ -47,7 +46,6 @@ export type Action =
 | { type: ACTION_TYPES.UPDATE_SIGNUP_FORM_ERROR, payload: { field: "usernameError" | "emailError" | "passwordError" | "confirmPasswordError", error: string } }
 | { type: ACTION_TYPES.GET_COMMENTS }
 | { type: ACTION_TYPES.GET_COMMENTS_SUCCESS; payload: Comment[] }
-| { type: ACTION_TYPES.CHANGE_NEW_COMMENT_CONTENT; payload: string }
 | { type: ACTION_TYPES.UPDATE_COMMENT; payload: { id: number; content: string } }
 | { type: ACTION_TYPES.DELETE_COMMENT; payload: number }
 | { type: ACTION_TYPES.UPDATE_SCORE; payload: { id: number; score: number } };

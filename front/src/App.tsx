@@ -127,12 +127,12 @@ const App: React.FC = () => {
         <SignInModale />
       )}
       <Header />
-      {loading && <Spinner size={100} />}
+      {loading && <Spinner size={100} className="absolute" />}
       {!loading && (
         <CommentList />
       )}
       {!loading && isLogged && (
-        <WritingBox />
+        <WritingBox replyTo={null}/>
       )}
       <Attribution />
     </div>

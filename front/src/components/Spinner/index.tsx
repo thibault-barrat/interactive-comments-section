@@ -3,11 +3,12 @@ import styles from "./Spinner.module.scss";
 
 type Props = {
   size: number;
+  className?: string;
 };
 
-const Spinner: React.FC<Props> = ({ size }) => {
+const Spinner: React.FC<Props> = ({ size, className }) => {
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${className ? styles[className] : ''}`}>
       <span
         className={styles.spinner}
         style={{

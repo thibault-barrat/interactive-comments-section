@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Comment } from "../../utils/models";
 import Button from "../Button";
 import styles from "./WritingBox.module.scss";
@@ -6,9 +6,16 @@ import axios from "axios";
 import { useAppDispatch, useAppState } from "../../utils/context";
 import { ACTION_TYPES } from "../../store/actions";
 
-const WritingBox = () => {
-  
-  const { id, accessToken, avatarUrl, newCommentContent } = useAppState();
+type Props = {
+  replyTo: number | null;
+  replyToAuthor?: string;
+  setIsReplying?: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const WritingBox: React.FC<Props> = ({ replyTo, setIsReplying, replyToAuthor }) => {
+  const [content, setContent] = useState<string>("");
+  const { id, accessToken, avatarUrl } = useAppState();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const dispatch = useAppDispatch();
   const fetchComments = () => {
     axios
@@ -20,7 +27,7 @@ const WritingBox = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newCommentContent.length === 0) {
+    if (content.length === 0) {
       return;
     }
     const header = {
@@ -30,12 +37,14 @@ const WritingBox = () => {
     };
     axios
       .post(process.env.REACT_APP_API_URL + "/createComment", {
-        content: newCommentContent,
+        content,
+        replying_to: replyTo,
         score: 0,
         user_id: id,
       }, header)
       .then(() => {
-        dispatch({ type: ACTION_TYPES.CHANGE_NEW_COMMENT_CONTENT, payload: ""})
+        setContent("");
+        setIsReplying && setIsReplying(false);
         fetchComments();
       })
       .catch((err) => {
@@ -43,15 +52,25 @@ const WritingBox = () => {
       });
   };
 
+  // if it is a reply, set the content to the author's name
+  // and put focus on it
+  useEffect(() => {
+    if (replyToAuthor) {
+      setContent(`@${replyToAuthor} `);
+      textareaRef.current && textareaRef.current.focus();
+    }
+  }, [replyToAuthor]);
+
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${replyTo ? styles.reply : ''}`}>
       <form className={styles.form}>
         <textarea
           className={styles.textarea}
           placeholder="Add a comment..."
           rows={3}
-          value={newCommentContent}
-          onChange={(e) => dispatch({ type: ACTION_TYPES.CHANGE_NEW_COMMENT_CONTENT, payload: e.target.value })}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          ref={textareaRef}
         />
         <img
           className={styles.avatar}
@@ -59,7 +78,7 @@ const WritingBox = () => {
           alt={"My avatar"}
         />
         <Button
-          text="Send"
+          text={replyTo ? "Reply" : "Send"}
           onClick={handleSubmit}
           type="submit"
         />

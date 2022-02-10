@@ -3,7 +3,7 @@
 .container {
   background: white;
   border-radius: 5px;
-  margin-bottom: 15px;
+  margin-top: 15px;
   padding: 15px;
   display: grid;
   grid-template-columns: auto min-content;
@@ -60,14 +60,22 @@
     content: '';
     background: vars.$light-gray;
     width: 2px;
-    height: 120%;
+    height: 100%;
     position: absolute;
     left: -15px;
     bottom: 0;
   }
 }
 
-.parent {
+.reply {
+  & + .reply {
+    &::before {
+      height: 120%;
+    }
+  }
+}
+
+.writingBox {
   & + .reply {
     &::before {
       height: 100%;

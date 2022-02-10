@@ -4,7 +4,6 @@ import { Comment } from "../utils/models";
 export const initialState = {
   comments: [] as Comment[],
   loading: false,
-  newCommentContent: "",
   loginForm: {
     email: "",
     password: "",
@@ -166,11 +165,6 @@ export const reducer = (state = initialState, action: Action) => {
         ...state,
         loading: false,
         comments: action.payload,
-      };
-    case ACTION_TYPES.CHANGE_NEW_COMMENT_CONTENT:
-      return {
-        ...state,
-        newCommentContent: action.payload,
       };
     case ACTION_TYPES.UPDATE_COMMENT:
       return {
