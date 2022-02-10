@@ -28,7 +28,7 @@ const commentController = {
       const userId = req.user.id;
 
       for (let property in req.body) {
-        if (req.body[property].length === 0 && property !== "replying_to") {
+        if (req.body[property] !== null && req.body[property].length === 0 && property !== "replying_to") {
           return res.status(400).send({
             errorMessage: `${property} can't be empty!`,
           });
