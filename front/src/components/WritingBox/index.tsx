@@ -25,6 +25,34 @@ const WritingBox: React.FC<Props> = ({ replyTo, setIsReplying, replyToAuthor }) 
       });
   };
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (content.length === 0) {
+  //     return;
+  //   }
+  //   const header = {
+  //     headers: {
+  //       Authorization: `Bearer ${accessToken}`,
+  //     },
+  //   };
+  //   try {
+  //     await axios
+  //     .post(process.env.REACT_APP_API_URL + "/createComment", {
+  //       content,
+  //       replying_to: replyTo,
+  //       score: 0,
+  //       user_id: id,
+  //     }, header);
+  //     setContent("");
+  //       setIsReplying && setIsReplying(false);
+  //       fetchComments();
+  //   }
+  //   catch (err) {
+  //     console.log('prout');
+  //     console.log(err);
+  //   }
+  // };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (content.length === 0) {

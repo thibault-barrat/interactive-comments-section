@@ -15,55 +15,65 @@ import { useAppDispatch, useAppState } from "./utils/context";
 import { ACTION_TYPES } from "./store/actions";
 
 const App: React.FC = () => {
-
-  const { loading, isLogged, loginForm: { show : showSignInForm }, signupForm: { show: showSignUpForm} } = useAppState();
+  const {
+    loading,
+    isLogged,
+    loginForm: { show: showSignInForm },
+    signupForm: { show: showSignUpForm },
+  } = useAppState();
   const dispatch = useAppDispatch();
 
   // configuration of axios interceptor
   // to handle 401 unauthorized error
   // and get new tokens
-  // axios.interceptors.response.use(
-  //   (response) => response,
-  //   async (error) => {
-  //     const originalRequest = error.config;
-  //     if (error.response.status === 401 && !originalRequest._retry) {
-  //       originalRequest._retry = true;
-  //       const token = localStorage.getItem("refreshToken");
-  //       if (token) {
-  //         const exp = jwt_decode<Token>(token).exp;
-  //         if (exp * 1000 < Date.now()) {
-  //           localStorage.removeItem("refreshToken");
-  //           setIsLogged(false);
-  //           setAccessToken("");
-  //           setUserId(0);
-  //           setAvatarUrl("");
-  //         } else {
-  //           // if not we dispatch refreshToken action to obtain new accessToken
-  //           axios
-  //             .post(process.env.REACT_APP_API_URL + "/refreshToken", {
-  //               refreshToken: token,
-  //             })
-  //             .then((res) => {
-  //               localStorage.setItem("refreshToken", res.data.refreshToken);
-  //               const { id, avatarUrl } = jwt_decode<Token>(
-  //                 res.data.accessToken
-  //               );
-  //               setUserId(id);
-  //               setAvatarUrl(avatarUrl);
-  //               setAccessToken(res.data.accessToken);
-  //               setIsLogged(true);
-  //               originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
-  //               return axios(originalRequest);
-  //             })
-  //             .catch((err) => {
-  //               console.log(err);
-  //             });
-  //         }
-  //       }
-  //     }
-  //     return Promise.reject(error);
-  //   }
-  // );
+  axios.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+      if (
+        error.response.status === 401 &&
+        !originalRequest._retry &&
+        !originalRequest.url.includes("/refreshToken")
+      ) {
+        originalRequest._retry = true;
+        const token = localStorage.getItem("refreshToken");
+        if (token) {
+          const exp = jwt_decode<Token>(token).exp;
+          if (exp * 1000 < Date.now()) {
+            localStorage.removeItem("refreshToken");
+            dispatch({ type: ACTION_TYPES.LOGOUT });
+          } else {
+            // if not we dispatch refreshToken action to obtain new accessToken
+            axios
+              .post(process.env.REACT_APP_API_URL + "/refreshToken", {
+                refreshToken: token,
+              })
+              .then((res) => {
+                localStorage.setItem("refreshToken", res.data.refreshToken);
+                const { id, avatarUrl } = jwt_decode<Token>(
+                  res.data.accessToken
+                );
+                dispatch({
+                  type: ACTION_TYPES.LOGIN_SUCCESS,
+                  payload: {
+                    id,
+                    accessToken: res.data.accessToken,
+                    avatarUrl,
+                  },
+                });
+                originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
+                axios(originalRequest).then((res) => {
+                  fetchComments();
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+        }
+      }
+    }
+  );
 
   const refreshToken = (token: string) => {
     axios
@@ -87,14 +97,21 @@ const App: React.FC = () => {
       });
   };
 
-  // at first render, fetch the comments and check refresh token
-  useEffect(() => {
-    dispatch({ type: ACTION_TYPES.GET_COMMENTS });
+  const fetchComments = () => {
     axios
       .get<Comment[]>(process.env.REACT_APP_API_URL + "/allComments")
       .then((res) => {
-        dispatch({ type: ACTION_TYPES.GET_COMMENTS_SUCCESS, payload: res.data });
+        dispatch({
+          type: ACTION_TYPES.GET_COMMENTS_SUCCESS,
+          payload: res.data,
+        });
       });
+  };
+
+  // at first render, fetch the comments and check refresh token
+  useEffect(() => {
+    dispatch({ type: ACTION_TYPES.GET_COMMENTS });
+    fetchComments();
     const token = localStorage.getItem("refreshToken");
     if (token) {
       // we check if the token is expired
@@ -120,20 +137,12 @@ const App: React.FC = () => {
 
   return (
     <div className={styles.app}>
-      {showSignUpForm && (
-        <SignUpModale />
-      )}
-      {showSignInForm && (
-        <SignInModale />
-      )}
+      {showSignUpForm && <SignUpModale />}
+      {showSignInForm && <SignInModale />}
       <Header />
       {loading && <Spinner size={100} className="absolute" />}
-      {!loading && (
-        <CommentList />
-      )}
-      {!loading && isLogged && (
-        <WritingBox replyTo={null}/>
-      )}
+      {!loading && <CommentList />}
+      {!loading && isLogged && <WritingBox replyTo={null} />}
       <Attribution />
     </div>
   );
