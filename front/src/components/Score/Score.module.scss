@@ -11,6 +11,15 @@
   font-weight: 500;
   color: vars.$moderate-blue;
   width: 100px;
+  @media (min-width: vars.$breakpoint){
+    flex-direction: column;
+    grid-row: 1 / span 2;
+    margin-right: 20px;
+    align-self: start;
+    border-radius: 8px;
+    width: auto;
+    height: 100px;
+  }
 }
 
 .button {

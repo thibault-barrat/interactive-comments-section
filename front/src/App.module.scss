@@ -5,8 +5,9 @@
 .app {
   font-family: "Rubik", sans-serif;
   min-height: 100vh;
-  background-color: vars.$very-light-gray;
   padding: 30px 15px;
   color: vars.$grayish-blue;
   position: relative;
+  max-width: 728px;
+  margin: 0 auto;
 }
