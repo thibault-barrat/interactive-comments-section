@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Score.module.scss";
 import { Score as ScoreObject } from "../../utils/models";
 import axios from "axios";
@@ -11,6 +11,7 @@ type Props = {
 };
 
 const Score: React.FC<Props> = ({ score, id }) => {
+  const [alreadyRated, setAlreadyRated] = useState(false);
   const dispatch = useAppDispatch();
   const handleIncreaseScore = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -19,7 +20,11 @@ const Score: React.FC<Props> = ({ score, id }) => {
         `${process.env.REACT_APP_API_URL}/increaseCommentScore/${id}`
       )
       .then((res) => {
-        dispatch({ type: ACTION_TYPES.UPDATE_SCORE, payload: {id, score: res.data.score} });
+        dispatch({
+          type: ACTION_TYPES.UPDATE_SCORE,
+          payload: { id, score: res.data.score },
+        });
+        setAlreadyRated(true);
       });
   };
 
@@ -30,7 +35,11 @@ const Score: React.FC<Props> = ({ score, id }) => {
         `${process.env.REACT_APP_API_URL}/decreaseCommentScore/${id}`
       )
       .then((res) => {
-        dispatch({ type: ACTION_TYPES.UPDATE_SCORE, payload: {id, score: res.data.score} });
+        dispatch({
+          type: ACTION_TYPES.UPDATE_SCORE,
+          payload: { id, score: res.data.score },
+        });
+        setAlreadyRated(true);
       });
   };
 
@@ -40,6 +49,7 @@ const Score: React.FC<Props> = ({ score, id }) => {
         className={styles.button}
         type="button"
         onClick={handleIncreaseScore}
+        disabled={alreadyRated}
       >
         <svg
           width="11"
@@ -60,8 +70,15 @@ const Score: React.FC<Props> = ({ score, id }) => {
         className={styles.button}
         type="button"
         onClick={handleDecreaseScore}
+        disabled={alreadyRated}
       >
-        <svg width="11" height="3" xmlns="http://www.w3.org/2000/svg" className={styles.icon} aria-labelledby="minus-button">
+        <svg
+          width="11"
+          height="3"
+          xmlns="http://www.w3.org/2000/svg"
+          className={styles.icon}
+          aria-labelledby="minus-button"
+        >
           <title id="minus-button">Minus</title>
           <path
             d="M9.256 2.66c.204 0 .38-.056.53-.167.148-.11.222-.243.222-.396V.722c0-.152-.074-.284-.223-.395a.859.859 0 0 0-.53-.167H.76a.859.859 0 0 0-.53.167C.083.437.009.57.009.722v1.375c0 .153.074.285.223.396a.859.859 0 0 0 .53.167h8.495Z"
