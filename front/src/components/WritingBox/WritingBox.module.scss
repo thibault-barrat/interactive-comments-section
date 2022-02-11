@@ -22,7 +22,7 @@
 
 .textarea {
   grid-row: 1;
-  grid-column: 2;
+  grid-column: 1/ span 2;
   padding: 10px;
   font-family: inherit;
   color: inherit;
@@ -37,6 +37,10 @@
   }
   &:focus {
     border: 1px solid vars.$moderate-blue;
+  }
+  @media (min-width: vars.$breakpoint) {
+    grid-row: 1;
+    grid-column: 2;
   }
 }
 
